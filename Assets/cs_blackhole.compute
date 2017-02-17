@@ -1,0 +1,44 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct Particle {
+	float4 pos;
+	float4 vel;
+};
+
+
+RWStructuredBuffer<Particle> particles;
+float3 bh1;
+float3 bh2;
+[numthreads(1000, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	float Gravity = 1000.0;
+	float ParticleMass = 0.1;
+	float ParticleInvMass = 10.0;
+	float DeltaT = 0.005; 
+
+	float3 p = particles[id.x].pos.xyz;
+
+	float3 d = bh1 - p;
+	float dist = length(d);
+	float3 force = (Gravity / dist)*normalize(d);
+
+	d = bh2 - p;
+	dist = length(d);
+	force += (Gravity / dist)*normalize(d);
+
+	// Reset particles that get too far from the attractors
+	if (dist >45.0f) {
+		particles[id.x].pos = float4(0, 0, 0, 1);
+	}
+	else {
+		// Apply simple Euler integrator
+		float3 a = force* ParticleInvMass;
+		particles[id.x].pos = float4(
+			p + particles[id.x].vel.xyz*DeltaT + 0.5*a*DeltaT*DeltaT, 1.0);
+		particles[id.x].vel = float4(particles[id.x].vel.xyz + a*DeltaT, 0.0);
+	}
+}
