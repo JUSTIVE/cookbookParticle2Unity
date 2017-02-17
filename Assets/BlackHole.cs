@@ -64,8 +64,8 @@ public class BlackHole : MonoBehaviour {
                 for (int k = 0; k < depth; k++)
                 {
                     value[i * height + j].pos.x = (dx * i) - 0.25f;
-                    value[i * height + j].pos.y = dy * j;
-                    value[i * height + j].pos.z = k * dz;
+                    value[i * height + j].pos.y = (dy * j)-0.5f;
+                    value[i * height + j].pos.z = (dz * k) - 0.5f;
                     value[i * height + j].pos.w = 1.0f;
                 }
             }
@@ -91,48 +91,46 @@ public class BlackHole : MonoBehaviour {
     private void OnPostRender()
     {
         mat.SetPass(0);
-        mat.SetBuffer("value", cBuff);
+        //mat.SetBuffer("value", cBuff);
         Graphics.DrawProcedural(MeshTopology.Points, particleSize, 1);
         
     }
     private void OnRenderObject()
     {
-        att1 = bh1;
-        att2 = bh2;
+        
         //GL.PushMatrix();
-        GL.LoadOrtho();
-        GL.Begin(GL.QUADS);
-        {
-            GL.Vertex3(att1.x + 0.005f, att1.y - 0.005f, 0);
-            GL.Vertex3(att1.x + 0.005f, att1.y + 0.005f, 0);
-            GL.Vertex3(att1.x - 0.005f, att1.y + 0.005f, 0);
-            GL.Vertex3(att1.x - 0.005f, att1.y - 0.005f, 0);
+        //GL.LoadOrtho();
+        //GL.Begin(GL.QUADS);
+        //{
+        //    GL.Vertex3(att1.x + 0.005f, att1.y - 0.005f, 0);
+        //    GL.Vertex3(att1.x + 0.005f, att1.y + 0.005f, 0);
+        //    GL.Vertex3(att1.x - 0.005f, att1.y + 0.005f, 0);
+        //    GL.Vertex3(att1.x - 0.005f, att1.y - 0.005f, 0);
 
 
-        }
-        GL.End();
-        GL.Begin(GL.QUADS);
-        GL.Vertex3(att2.x + 0.005f, att2.y - 0.005f, 0);
-        GL.Vertex3(att2.x + 0.005f, att2.y + 0.005f, 0);
-        GL.Vertex3(att2.x - 0.005f, att2.y + 0.005f, 0);
-        GL.Vertex3(att2.x - 0.005f, att2.y - 0.005f, 0);
-        GL.End();
+        //}
+        //GL.End();
+        //GL.Begin(GL.QUADS);
+        //GL.Vertex3(att2.x + 0.005f, att2.y - 0.005f, 0);
+        //GL.Vertex3(att2.x + 0.005f, att2.y + 0.005f, 0);
+        //GL.Vertex3(att2.x - 0.005f, att2.y + 0.005f, 0);
+        //GL.Vertex3(att2.x - 0.005f, att2.y - 0.005f, 0);
+        //GL.End();
     }
     void Update()
     {
-        //angle += speed * Time.deltaTime;
-
+        angle += speed * Time.deltaTime;
         att1 = bh1;
         att2 = bh2;
-        //att1 = Quaternion.AngleAxis(angle, Vector3.up) * att1;
-        //att2 = Quaternion.AngleAxis(angle, Vector3.up) * att2;
+        att1 = Quaternion.AngleAxis(angle, Vector3.forward) * att1;
+        att2 = Quaternion.AngleAxis(angle, Vector3.forward) * att2;
 
 
-        //cShader.SetVector("bh1", att1);
-        //cShader.SetVector("bh2", att2);
+        cShader.SetVector("bh1", att1);
+        cShader.SetVector("bh2", att2);
 
         cShader.Dispatch(kernelHandle, particleSize / 1000, 1, 1);
-
+        
         //cBuff.GetData(value);
         //Debug.Log(value[350].pos.y);
     }

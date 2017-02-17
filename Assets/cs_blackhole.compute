@@ -11,14 +11,14 @@ struct Particle {
 
 RWStructuredBuffer<Particle> particles;
 float3 bh1;
-float3 bh2;
+float3 bh2; 
 [numthreads(1000, 1, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
 	float Gravity = 1000.0;
 	float ParticleMass = 0.1;
 	float ParticleInvMass = 10.0;
-	float DeltaT = 0.005; 
+	float DeltaT = 0.0005f; 
 
 	float3 p = particles[id.x].pos.xyz;
 

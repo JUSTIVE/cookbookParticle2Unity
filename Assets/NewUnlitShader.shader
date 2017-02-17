@@ -25,8 +25,9 @@
 	v2f vert(uint id : SV_VertexID) {
 		v2f o;
 		float4 worldPos = particles[id].pos;
-		o.pos = mul(UNITY_MATRIX_VP, worldPos);
+		o.pos = mul(UNITY_MATRIX_MVP, worldPos);
 		//o.pos = float4(worldPos, 1.0f);
+		//o.pos = worldPos;
 		return o;
 	}
 	float4 frag(v2f i) : COLOR{
