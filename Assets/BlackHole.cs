@@ -26,6 +26,11 @@ public class BlackHole : MonoBehaviour {
     private int particleSize;
     private float angle = 0.0f;
     private float speed = 35.0f;
+    //values for count frame
+    private int masterCount = 0;
+    private float fpsSum = 0;
+
+
     // Use this for initialization
     void Start()
     {

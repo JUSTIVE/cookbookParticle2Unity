@@ -1,0 +1,30 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+struct Data {
+	float3 pos;
+	float3 vel;
+};
+
+RWStructuredBuffer<Data> values;
+
+[numthreads(32,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	float deltaT = 0.01f;
+	float3 p = values[id.x].pos;
+	float3 v = values[id.x].vel;
+
+	v.y += -9.81f*deltaT;
+	p += v*deltaT;
+
+	if (p.y < -1) {
+		v.y = -v.y*0.9;
+		p.y = -1;
+	}
+
+	values[id.x].pos = p;
+	values[id.x].vel = v;
+}

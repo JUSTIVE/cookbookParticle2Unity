@@ -12,18 +12,18 @@
 		#include "UnityCG.cginc"
 
 		struct Point {
-			float3 bh1;
-			float3 bh2;
+			float3 pos;
+			float3 vel;
 		};
 		struct v2f {
 			float4 pos : SV_POSITION;
 		};
 
-		StructuredBuffer<Point> bhp;
+		StructuredBuffer<Point> particle;
 
 		v2f vert(uint id : SV_VertexID) {
 			v2f o;
-			float4 worldPos = float4(bhp[id].bh1,1.0);
+			float4 worldPos = float4(particle[id].pos,1.0);
 			o.pos = mul(UNITY_MATRIX_VP, worldPos);
 			//o.pos = float4(worldPos, 1.0f);
 			return o;

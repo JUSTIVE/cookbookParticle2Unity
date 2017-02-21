@@ -22,14 +22,14 @@ Platform assembly: C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\black
 Loading C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\blackhole_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\blackhole_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
 Loading C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\blackhole_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
-- Completed reload, in  0.154 seconds
+- Completed reload, in  0.145 seconds
 Platform assembly: C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\blackhole_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\BenKim\Documents\GitHub\cookbookParticle2Unity\blackhole_Data\Managed\System.dll (this message is harmless)
 desktop: 2560x1600 60Hz; virtual: 2560x1600 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 6.280158 ms
+UnloadTime: 5.514433 ms
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 4268 -> priority: 1 
+  Thread -> id: 4158 -> priority: 1 
 GLContext: failed to activate 10001: Unknown error [-1073278755]
