@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BlackHole : MonoBehaviour {
+    //입자의 정보를 저장할 자료형
     struct data
     {
         public Vector4 pos;
         public Vector4 vel;
     };
-    
+    public Text text;
+    //블랙홀의 중심 좌표
     private Vector3 bh1;
     private Vector3 bh2;
-    
 
     public Shader shader;
-   // public Shader bhShader;
     data[] value;
     Vector3 att1;
     Vector3 att2;
+
     ComputeBuffer cBuff;
     public ComputeShader cShader;
+
     private Material mat;
     private Material mat1;
     private int kernelHandle;
@@ -28,9 +31,8 @@ public class BlackHole : MonoBehaviour {
     private float speed = 35.0f;
     //values for count frame
     private int masterCount = 0;
+    private float dts;
     private float fpsSum = 0;
-
-
     // Use this for initialization
     void Start()
     {
@@ -44,6 +46,7 @@ public class BlackHole : MonoBehaviour {
     }
     void init()
     {
+        text.text = "";
         //create material with input shader
         mat = new Material(shader);
         //mat1 = new Material(bhShader);
@@ -95,48 +98,33 @@ public class BlackHole : MonoBehaviour {
     }
     private void OnPostRender()
     {
+        //화면에 그릴 Material 설정
         mat.SetPass(0);
-        //mat.SetBuffer("value", cBuff);
+        //vert shader 와 frag shader를 이용하여 화면에 particleSize만큼 픽셀을 그림
         Graphics.DrawProcedural(MeshTopology.Points, particleSize, 1);
         
     }
-    private void OnRenderObject()
-    {
-        
-        //GL.PushMatrix();
-        //GL.LoadOrtho();
-        //GL.Begin(GL.QUADS);
-        //{
-        //    GL.Vertex3(att1.x + 0.005f, att1.y - 0.005f, 0);
-        //    GL.Vertex3(att1.x + 0.005f, att1.y + 0.005f, 0);
-        //    GL.Vertex3(att1.x - 0.005f, att1.y + 0.005f, 0);
-        //    GL.Vertex3(att1.x - 0.005f, att1.y - 0.005f, 0);
-
-
-        //}
-        //GL.End();
-        //GL.Begin(GL.QUADS);
-        //GL.Vertex3(att2.x + 0.005f, att2.y - 0.005f, 0);
-        //GL.Vertex3(att2.x + 0.005f, att2.y + 0.005f, 0);
-        //GL.Vertex3(att2.x - 0.005f, att2.y + 0.005f, 0);
-        //GL.Vertex3(att2.x - 0.005f, att2.y - 0.005f, 0);
-        //GL.End();
-    }
     void Update()
     {
+        //블랙홀의 중심을 회전
         angle += speed * Time.deltaTime;
         att1 = bh1;
         att2 = bh2;
         att1 = Quaternion.AngleAxis(angle, Vector3.forward) * att1;
         att2 = Quaternion.AngleAxis(angle, Vector3.forward) * att2;
 
-
         cShader.SetVector("bh1", att1);
         cShader.SetVector("bh2", att2);
-
+        //컴퓨트 셰이더 실행
         cShader.Dispatch(kernelHandle, particleSize / 1000, 1, 1);
-        
-        //cBuff.GetData(value);
-        //Debug.Log(value[350].pos.y);
+        //프레임 계산 
+        masterCount++;
+        dts += (1 / Time.deltaTime);
+        if (masterCount <= 2001)
+            if (masterCount % 200 == 0)
+            {
+                text.text += dts / 200.0 + "\n";
+                dts = 0;
+            }
     }
 }
