@@ -12,6 +12,7 @@ RWStructuredBuffer<Particle> particles;
 //블랙홀 중심 좌표
 float3 bh1;
 float3 bh2; 
+float DeltaT;
 //로컬 스레드 사이즈
 [numthreads(1000, 1, 1)]
 //위의 #pragma kernel 에서 정의한 커널 
@@ -20,7 +21,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 	float Gravity = 1000.0;
 	float ParticleMass = 0.1;
 	float ParticleInvMass = 10.0;
-	float DeltaT = 0.0005f; 
+	 
 	//여러번 버퍼에 접근하는 비용을 줄이기 위해 벡터를 가져옴
 	float3 p = particles[id.x].pos.xyz;
 	//입자와 첫번째 블랙홀과의 거리를 구함

@@ -33,6 +33,7 @@ public class BlackHole : MonoBehaviour {
     private int masterCount = 0;
     private float dts;
     private float fpsSum = 0;
+    private float deltaT=0.0005f;
     // Use this for initialization
     void Start()
     {
@@ -46,7 +47,7 @@ public class BlackHole : MonoBehaviour {
     }
     void init()
     {
-        text.text = "";
+        text.text = deltaT + "\n";
         //create material with input shader
         mat = new Material(shader);
         //mat1 = new Material(bhShader);
@@ -90,7 +91,7 @@ public class BlackHole : MonoBehaviour {
         cBuff.SetData(value);
         //set Particle data 
         mat.SetBuffer("particles", cBuff);
-
+        cShader.SetFloat("deltaT", deltaT);
         cShader.SetVector("bh1", bh1);
         cShader.SetVector("bh2", bh2);
         cShader.SetBuffer(kernelHandle, "particles", cBuff);
@@ -126,5 +127,20 @@ public class BlackHole : MonoBehaviour {
                 text.text += dts / 200.0 + "\n";
                 dts = 0;
             }
+        if (Input.GetMouseButtonDown(0))
+        {
+            
+            dts = 0;
+            masterCount = 0;
+            deltaT *= 2;
+            if (deltaT >= 0.01f)
+            {
+                deltaT = 0.0005f;
+            }
+            cShader.SetFloat("DeltaT", deltaT);
+            text.text = deltaT+"\n";
+            init();
+        }
     }
+    
 }
