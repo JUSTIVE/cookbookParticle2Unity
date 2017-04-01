@@ -18,6 +18,7 @@
 		struct v2f {
 			float4 pos : SV_POSITION;
 		};
+		
 
 		StructuredBuffer<Point> particle;
 
@@ -26,10 +27,11 @@
 			float4 worldPos = float4(particle[id].pos,1.0);
 			o.pos = mul(UNITY_MATRIX_VP, worldPos);
 			//o.pos = float4(worldPos, 1.0f);
+			
 			return o;
 		}
 		float4 frag(v2f i) : COLOR{
-			return float4(0.0f,0.0f,0.0,1.0f);
+			return float4(255.0f,0.0f,0.0,1.0f);
 		}
 			ENDCG
 		}

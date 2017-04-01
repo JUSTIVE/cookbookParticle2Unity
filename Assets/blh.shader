@@ -18,7 +18,7 @@
 		struct v2f {
 			float4 pos : SV_POSITION;
 		};
-
+		float n,m;
 		StructuredBuffer<Point> bhp;
 
 		v2f vert(uint id : SV_VertexID) {

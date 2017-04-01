@@ -13,12 +13,14 @@ public class BlackHole : MonoBehaviour {
     //블랙홀의 중심 좌표
     private Vector3 bh1;
     private Vector3 bh2;
-
+    public bool showText = false;
     public Shader shader;
     data[] value;
     Vector3 att1;
     Vector3 att2;
-
+    public int x = 100;
+    public int y = 100;
+    public int z = 100;
     ComputeBuffer cBuff;
     public ComputeShader cShader;
 
@@ -47,14 +49,15 @@ public class BlackHole : MonoBehaviour {
     }
     void init()
     {
-        text.text = deltaT + "\n";
+        if(showText)
+            text.text = deltaT + "\n";
         //create material with input shader
         mat = new Material(shader);
         //mat1 = new Material(bhShader);
         //set Size
-        width = 100;
-        height = 100;
-        depth = 100;
+        width = (int)x;
+        height = (int)y;
+        depth = (int)z;
         //calculate particle size
         particleSize = width * height * depth;
         //create Particle data
@@ -73,8 +76,8 @@ public class BlackHole : MonoBehaviour {
                 for (int k = 0; k < depth; k++)
                 {
                     value[i * height + j].pos.x = (dx * i) - 0.25f;
-                    value[i * height + j].pos.y = (dy * j)-0.5f;
-                    value[i * height + j].pos.z = (dz * k) - 0.5f;
+                    value[i * height + j].pos.y = (dy * j) - 0.5f;
+                    value[i * height + j].pos.z = (dz * k) - 0.0f;
                     value[i * height + j].pos.w = 1.0f;
                 }
             }
@@ -91,6 +94,9 @@ public class BlackHole : MonoBehaviour {
         cBuff.SetData(value);
         //set Particle data 
         mat.SetBuffer("particles", cBuff);
+        mat.SetFloat("x", (float)x);
+        mat.SetFloat("y", (float)y);
+        mat.SetFloat("z", (float)z);
         cShader.SetFloat("deltaT", deltaT);
         cShader.SetVector("bh1", bh1);
         cShader.SetVector("bh2", bh2);
@@ -124,7 +130,8 @@ public class BlackHole : MonoBehaviour {
         if (masterCount <= 2001)
             if (masterCount % 200 == 0)
             {
-                text.text += dts / 200.0 + "\n";
+                if (showText)
+                    text.text += dts / 200.0 + "\n";
                 dts = 0;
             }
         if (Input.GetMouseButtonDown(0))
@@ -137,7 +144,8 @@ public class BlackHole : MonoBehaviour {
             {
                 deltaT = 0.0005f;
             }
-            cShader.SetFloat("DeltaT", deltaT);
+            if (showText)
+                cShader.SetFloat("DeltaT", deltaT);
             text.text = deltaT+"\n";
             init();
         }
